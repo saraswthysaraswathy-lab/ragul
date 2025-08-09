@@ -1,0 +1,366 @@
+sales table
+step 1: create the example table
+create table sales (
+saleid int primary key,
+salesperson varchar(50),
+region varchar(50),
+product varchar(50),
+quantity int,
+saleamount decimal(10,2)
+);
+step 2: insert sample data
+insert into sales (saleid, salesperson, region, product, quantity, saleamount) values
+(1, &#39;alice&#39;, &#39;north&#39;, &#39;laptop&#39;, 1, 1000.00),
+(2, &#39;bob&#39;, &#39;south&#39;, &#39;mouse&#39;, 3, 75.00),
+(3, &#39;alice&#39;, &#39;north&#39;, &#39;monitor&#39;, 2, 300.00),
+(4, &#39;charlie&#39;, &#39;east&#39;, &#39;keyboard&#39;, 1, 50.00),
+(5, &#39;bob&#39;, &#39;south&#39;, &#39;monitor&#39;, 1, 150.00),
+(6, &#39;alice&#39;, &#39;north&#39;, &#39;mouse&#39;, 2, 50.00),
+(7, &#39;charlie&#39;, &#39;east&#39;, &#39;laptop&#39;, 2, 2000.00),
+(8, &#39;david&#39;, &#39;west&#39;, &#39;laptop&#39;, 1, 1100.00),
+(9, &#39;david&#39;, &#39;west&#39;, &#39;mouse&#39;, 4, 100.00),
+(10, &#39;eve&#39;, &#39;south&#39;, &#39;monitor&#39;, 3, 450.00),
+(11, &#39;eve&#39;, &#39;south&#39;, &#39;keyboard&#39;, 2, 100.00),
+(12, &#39;eve&#39;, &#39;south&#39;, &#39;mouse&#39;, 1, 25.00),
+(13, &#39;alice&#39;, &#39;north&#39;, &#39;keyboard&#39;, 1, 60.00),
+(14, &#39;bob&#39;, &#39;south&#39;, &#39;laptop&#39;, 1, 1200.00),
+(15, &#39;charlie&#39;, &#39;east&#39;, &#39;mouse&#39;, 2, 50.00);
+
+1.find total quantity sold by each salesperson.
+2.find salespersons who sold more than 5 items in total.
+3.find number of products sold by each salesperson.
+4.list regions where total sale amount exceeded $1000.
+5.show salespersons who made more than 2 sales transactions.
+6.find total sale amount by product, and show only products that made over $500 in sales.
+7.show the total quantity sold of each product in each region.
+8.find salespersons who sold more than 1 type of product.
+9.find the average quantity per product sold per region, where the average is greater than 1.
+10.show salespersons whose total sale amount is between $500 and $1500.
+11.list top-performing products (more than 3 units sold in total).
+12.list salespersons who sold laptops.
+13.find total sale amount per salesperson per region, only where it exceeds $500.
+14.find salespersons who sold at least 2 different products in a single region.
+15.find products that were sold in more than one region.
+16.show total number of sales per product and hide products with fewer than 2 sales.
+17.find region-wise total quantity sold by each salesperson.
+18.find salespersons who made more than 3 transactions and total sales amount is over
+$1000.
+19.find average sale amount per region and show only regions with average above $200.
+20.list regions and products where more than 3 units were sold.
+
+mysql> use sales;
+database changed
+mysql> create table sales (
+    ->     saleid int ,
+    ->     salesperson varchar(50),
+    ->     region varchar(50),
+    ->     product varchar(50),
+    ->     quantity int,
+    ->     saleamount decimal(10, 2)
+    -> );
+query ok, 0 rows affected (0.07 sec)
+
+mysql> insert into sales (saleid, salesperson, region, product, quantity, saleamount) values
+    -> (1, 'alice', 'north', 'laptop', 1, 1000.00),
+    -> (2, 'bob', 'south', 'mouse', 3, 75.00),
+    -> (3, 'alice', 'north', 'monitor', 2, 300.00),
+    -> (4, 'charlie', 'east', 'keyboard', 1, 50.00),
+    -> (5, 'bob', 'south', 'monitor', 1, 150.00),
+    -> (6, 'alice', 'north', 'mouse', 2, 50.00),
+    -> (7, 'charlie', 'east', 'laptop', 2, 2000.00),
+    -> (8, 'david', 'west', 'laptop', 1, 1100.00),
+    -> (9, 'david', 'west', 'mouse', 4, 100.00),
+    -> (10, 'eve', 'south', 'monitor', 3, 450.00),
+    -> (11, 'eve', 'south', 'keyboard', 2, 100.00),
+    -> (12, 'eve', 'south', 'mouse', 1, 25.00),
+    -> (13, 'alice', 'north', 'keyboard', 1, 60.00),
+    -> (14, 'bob', 'south', 'laptop', 1, 1200.00),
+    -> (15, 'charlie', 'east', 'mouse', 2, 50.00);
+query ok, 15 rows affected (0.02 sec)
+records: 15  duplicates: 0  warnings: 0
+
+mysql> select * from sales;
++--------+-------------+--------+----------+----------+------------+
+| saleid | salesperson | region | product  | quantity | saleamount |
++--------+-------------+--------+----------+----------+------------+
+|      1 | alice       | north  | laptop   |        1 |    1000.00 |
+|      2 | bob         | south  | mouse    |        3 |      75.00 |
+|      3 | alice       | north  | monitor  |        2 |     300.00 |
+|      4 | charlie     | east   | keyboard |        1 |      50.00 |
+|      5 | bob         | south  | monitor  |        1 |     150.00 |
+|      6 | alice       | north  | mouse    |        2 |      50.00 |
+|      7 | charlie     | east   | laptop   |        2 |    2000.00 |
+|      8 | david       | west   | laptop   |        1 |    1100.00 |
+|      9 | david       | west   | mouse    |        4 |     100.00 |
+|     10 | eve         | south  | monitor  |        3 |     450.00 |
+|     11 | eve         | south  | keyboard |        2 |     100.00 |
+|     12 | eve         | south  | mouse    |        1 |      25.00 |
+|     13 | alice       | north  | keyboard |        1 |      60.00 |
+|     14 | bob         | south  | laptop   |        1 |    1200.00 |
+|     15 | charlie     | east   | mouse    |        2 |      50.00 |
++--------+-------------+--------+----------+----------+------------+
+15 rows in set (0.01 sec)
+
+mysql> select salesperson,sum(quantity) from sales group by salesperson,sum(quantity;
+error 1064 (42000): you have an error in your sql syntax; check the manual that corresponds to your mysql server version for the right syntax to use near '' at line 1
+mysql> select salesperson,sum(quantity) from sales group by salesperson;
++-------------+---------------+
+| salesperson | sum(quantity) |
++-------------+---------------+
+| alice       |             6 |
+| bob         |             5 |
+| charlie     |             5 |
+| david       |             5 |
+| eve         |             6 |
++-------------+---------------+
+5 rows in set (0.01 sec)
+
+mysql> select salesperson,sum(quantity) from sales where sum(quantity)>5 group by salesperson;
+error 1111 (hy000): invalid use of group function
+mysql> select salesperson,sum(quantity) from sales where sum(quantity)>5 group by salesperson, sum(quantity);
+error 1111 (hy000): invalid use of group function
+mysql> select salesperson,sum(quantity) from group by salesperson having sum(quantity) > 5;
+error 1064 (42000): you have an error in your sql syntax; check the manual that corresponds to your mysql server version for the right syntax to use near 'group by salesperson having sum(quantity) > 5' at line 1
+mysql> select salesperson,sum(quantity) from group by salesperson having sum(quantity)>5;
+error 1064 (42000): you have an error in your sql syntax; check the manual that corresponds to your mysql server version for the right syntax to use near 'group by salesperson having sum(quantity)>5' at line 1
+mysql> select salesperson,sum(quantity) from sales group by salesperson having sum(quantity)>5;
++-------------+---------------+
+| salesperson | sum(quantity) |
++-------------+---------------+
+| alice       |             6 |
+| eve         |             6 |
++-------------+---------------+
+2 rows in set (0.01 sec)
+
+mysql> select salesperson, count(product) from sales group by salesperson;
++-------------+----------------+
+| salesperson | count(product) |
++-------------+----------------+
+| alice       |              4 |
+| bob         |              3 |
+| charlie     |              3 |
+| david       |              2 |
+| eve         |              3 |
++-------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select region,sum(saleamount) from sales group by regions having sum(salesamount) > 1000.00;
+error 1054 (42s22): unknown column 'regions' in 'group statement'
+mysql> select region,sum(saleamount) from sales group by region having sum(salesamount) > 1000.00;
+error 1054 (42s22): unknown column 'salesamount' in 'having clause'
+mysql> select region,sum(saleamount) from sales group by region having sum(saleamount) > 1000.00;
++--------+-----------------+
+| region | sum(saleamount) |
++--------+-----------------+
+| north  |         1410.00 |
+| south  |         2000.00 |
+| east   |         2100.00 |
+| west   |         1200.00 |
++--------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> select salesperson, count(*) as transactioncount
+     from sales
+     group by salesperson
+     having count(*) > 2;
++-------------+------------------+
+| salesperson | transactioncount |
++-------------+------------------+
+| alice       |                4 |
+| bob         |                3 |
+| charlie     |                3 |
+| eve         |                3 |
++-------------+------------------+
+4 rows in set (0.01 sec)
+
+mysql> select salesperson, count(*) as transactioncount
+    from sales
+    group by salesperson
+    having count(*) > 2;
++-------------+------------------+
+| salesperson | transactioncount |
++-------------+------------------+
+| alice       |                4 |
+| bob         |                3 |
+| charlie     |                3 |
+| eve         |                3 |
++-------------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select product, sum(saleamount) as totalsales  from sales group by product
+   having sum(saleamount) > 500;
++---------+------------+
+| product | totalsales |
++---------+------------+
+| laptop  |    5300.00 |
+| monitor |     900.00 |
++---------+------------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql> select region, product, sum(quantity) as totalquantity from sales group by region, product;
++--------+----------+---------------+
+| region | product  | totalquantity |
++--------+----------+---------------+
+| north  | laptop   |             1 |
+| south  | mouse    |             4 |
+| north  | monitor  |             2 |
+| east   | keyboard |             1 |
+| south  | monitor  |             4 |
+| north  | mouse    |             2 |
+| east   | laptop   |             2 |
+| west   | laptop   |             1 |
+| west   | mouse    |             4 |
+| south  | keyboard |             2 |
+| north  | keyboard |             1 |
+| south  | laptop   |             1 |
+| east   | mouse    |             2 |
++--------+----------+---------------+
+13 rows in set (0.00 sec)
+
+mysql> select salesperson, count(distinct product) as producttypessold from sales group by salesperson having count(distinct product) > 1;
++-------------+------------------+
+| salesperson | producttypessold |
++-------------+------------------+
+| alice       |                4 |
+| bob         |                3 |
+| charlie     |                3 |
+| david       |                2 |
+| eve         |                3 |
++-------------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> select region, product, avg(quantity) as avgquantity from sales group by region, product having avg(quantity) > 1;
++--------+----------+-------------+
+| region | product  | avgquantity |
++--------+----------+-------------+
+| south  | mouse    |      2.0000 |
+| north  | monitor  |      2.0000 |
+| south  | monitor  |      2.0000 |
+| north  | mouse    |      2.0000 |
+| east   | laptop   |      2.0000 |
+| west   | mouse    |      4.0000 |
+| south  | keyboard |      2.0000 |
+| east   | mouse    |      2.0000 |
++--------+----------+-------------+
+8 rows in set (0.01 sec)
+
+mysql> select salesperson, sum(saleamount) as totalsales  from sales group by salesperson having sum(saleamount) between 500 and 1500;
++-------------+------------+
+| salesperson | totalsales |
++-------------+------------+
+| alice       |    1410.00 |
+| bob         |    1425.00 |
+| david       |    1200.00 |
+| eve         |     575.00 |
++-------------+------------+
+4 rows in set (0.01 sec)
+
+mysql> select product, sum(quantity) as totalunitssold  from sales  group by product having sum(quantity) > 3;
++----------+----------------+
+| product  | totalunitssold |
++----------+----------------+
+| laptop   |              5 |
+| mouse    |             12 |
+| monitor  |              6 |
+| keyboard |              4 |
++----------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> select distinct salesperson from sales where product = 'laptop';
++-------------+
+| salesperson |
++-------------+
+| alice       |
+| charlie     |
+| david       |
+| bob         |
++-------------+
+4 rows in set (0.01 sec)
+
+mysql> select salesperson, region, sum(saleamount) as totalsales  from sales group by salesperson, region having sum(saleamount) > 500;
++-------------+--------+------------+
+| salesperson | region | totalsales |
++-------------+--------+------------+
+| alice       | north  |    1410.00 |
+| bob         | south  |    1425.00 |
+| charlie     | east   |    2100.00 |
+| david       | west   |    1200.00 |
+| eve         | south  |     575.00 |
++-------------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select salesperson, region from sales  group by salesperson, region having count(distinct product) >= 2;
++-------------+--------+
+| salesperson | region |
++-------------+--------+
+| alice       | north  |
+| bob         | south  |
+| charlie     | east   |
+| david       | west   |
+| eve         | south  |
++-------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select product from sales group by product having count(distinct region) > 1;
++----------+
+| product  |
++----------+
+| keyboard |
+| laptop   |
+| monitor  |
+| mouse    |
++----------+
+4 rows in set (0.00 sec)
+
+mysql> select product, count() as numberofsales from sales group by product having count() >= 2;
++----------+---------------+
+| product  | numberofsales |
++----------+---------------+
+| laptop   |             4 |
+| mouse    |             5 |
+| monitor  |             3 |
+| keyboard |             3 |
++----------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select salesperson, region, sum(quantity) as totalquantity from sales group by salesperson, region;
++-------------+--------+---------------+
+| salesperson | region | totalquantity |
++-------------+--------+---------------+
+| alice       | north  |             6 |
+| bob         | south  |             5 |
+| charlie     | east   |             5 |
+| david       | west   |             5 |
+| eve         | south  |             6 |
++-------------+--------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select salesperson, count() as transactions, sum(saleamount) as totalsales from sales group by salesperson having count() > 3 and sum(saleamount) > 1000;
++-------------+--------------+------------+
+| salesperson | transactions | totalsales |
++-------------+--------------+------------+
+| alice       |            4 |    1410.00 |
++-------------+--------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select region, avg(saleamount) as avgsaleamount from sales group by region having avg(saleamount) > 200;
++--------+---------------+
+| region | avgsaleamount |
++--------+---------------+
+| north  |    352.500000 |
+| south  |    333.333333 |
+| east   |    700.000000 |
+| west   |    600.000000 |
++--------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select region, product, sum(quantity) as totalquantity from sales group by region, product having sum(quantity) > 3;
++--------+---------+---------------+
+| region | product | totalquantity |
++--------+---------+---------------+
+| south  | mouse   |             4 |
+| south  | monitor |             4 |
+| west   | mouse   |             4 |
++--------+---------+---------------+
+3 rows in set (0.00 sec)
